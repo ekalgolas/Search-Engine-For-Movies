@@ -1,0 +1,95 @@
+/* centered columns styles */
+
+.row-centered {
+    text-align: center;
+}
+
+.col-centered {
+    display: inline-block;
+    float: none;
+    /* reset the text-align */
+    text-align: left;
+    /* inline-block space fix */
+    margin-right: -4px;
+}
+
+.centered {
+    text-align: center;
+    display: inline-block;
+    float: none;
+    margin: 0 auto;
+}
+
+.searchRow {
+    padding-bottom: 50px;
+}
+
+.alignLeft {
+    margin-right: 70%;
+}
+
+.results {
+    color: green;
+    font-weight: bold;
+}
+
+.noneFound {
+    color: black;
+    font-weight: bold;
+}
+
+.resultContainer {
+    width: 80%;
+    margin: 0 auto;
+    background: rgba(255, 255, 255, 0.3);
+    border-radius: 20px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+}
+
+.mainContainer {
+    width: 85%;
+    margin: 0 auto;
+}
+
+.searchRow {
+    padding-bottom: 80px
+}
+
+img{
+    max-height: 300px;
+    max-width: 300px;
+    
+    margin: auto auto;
+    padding-bottom: 30px;
+}
+.center{
+    margin: 0 auto;
+    text-align: center;
+}
+
+.panel{
+ height: 650px;   
+}
+
+/*search form*/
+.searchForm{
+   width: 50%;
+}
+.emp{
+    color: darkcyan;
+}
+
+/*Jumbotron Button*/
+#go{
+    margin-top: 17px;
+}
+
+
+/*jumbotron*/
+.jumbotron{
+height: 300px;    
+}
+.mainHeading{
+ display:none;   
+}
