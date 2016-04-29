@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Movie Search</title>
+    <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link href="css/style.css" rel="stylesheet">
+    <script src="js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/2.2.0/jquery.min.js"></script>
+</head>
+
+<body>
+    <div class="wrapper">
+		<div class="headerbar"><img src="bg.png"/></div>
+        
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="panel with-nav-tabs panel-default">
+
+                        <div class="panel-heading">
+                            <div class="search">
+                                <div class="row">
+                                    <h2>Search for movies..</h2>
+                                    <div id="custom-search-input">
+                                        <div class="input-group col-md-12">
+                                            <input id="query" type="text" class="  search-query form-control" placeholder="Search" />
+                                            <span class="input-group-btn">
+												<button id="searchButton" class="btn btn-danger"
+													type="button">
+													<span class=" glyphicon glyphicon-search"></span>
+                                            </button>
+                                            </span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="space"></div>
+                            <div>
+                                <ul class="nav nav-tabs">
+                                    <li class="active" id="tab1"><a  data-toggle="tab">Our Results</a></li>
+                                    <li id="tab2"><a  data-toggle="tab">Google
+											Search</a></li>
+                                    <li id="tab3"><a  data-toggle="tab">Bing
+											Search</a></li>
+                                    <li  id="tab11"><a  data-toggle="tab">Results with Hits</a></li>
+                                    <li  id="tab12"><a  data-toggle="tab">Results with Clustering</a></li>
+                                    <li  id="tab13"><a  data-toggle="tab">Results with Query Expansion</a></li>
+                                    
+                                    
+                            		
+                                </ul>
+                            </div>
+                        </div>
+                        <div class="panel-body hideme">
+                            <div class="tab-content">
+                                <div class="tab-pane fade in active" id="tab1default">
+                                    <div class="container">
+                                        <div class="solr" id="web-content"></div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade in " id="tab2default">
+                                    <div class="container">
+                                        <div class="google" id="web-content"></div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade in " id="tab3default">
+                                    <div class="container">
+                                        <div class="bing" id="web-content"></div>
+                                    </div>
+                                </div>
+                                <div class="tab-pane fade in active" id="tab11default">
+                                    <div class="container">
+                                        <div class="hits1" id="web-content"></div>
+                                    </div>
+                                </div>
+                                 <div class="tab-pane fade in active" id="tab12default">
+                                    <div class="container">
+                                        <div class="cluster1" id="web-content"></div>
+                                    </div>
+                                </div>
+                                 <div class="tab-pane fade in active" id="tab13default">
+                                    <div class="container">
+                                        <div class="mose3" id="web-content"></div>
+                                    </div>
+                                </div>
+                                
+                                
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <br />
+
+
+
+    <script>
+	   
+    
+        $(document).ready(function() {
+        	function truncate( n, useWordBoundary ){
+        	    var isTooLong = this.length > n,
+        	        s_ = isTooLong ? this.substr(0,n-1) : this;
+        	        s_ = (useWordBoundary && isTooLong) ? s_.substr(0,s_.lastIndexOf(' ')) : s_;
+        	    return  isTooLong ? s_ + '&hellip;' : s_;
+        	};
+        	
+            $("#searchButton").click(function() {
+                var queryVal = $('#query').val();
+                $(".solr").html("");
+                $(".solr").html("Searching");
+                $(".google").html("");
+                $(".bing").html("");
+                $(".hits1").html("");
+                $(".cluster1").html("");
+                $(".mose3").html("");
+                $(".nav-tabs .active").removeClass(
+                "active");
+          		  $("#tab1").addClass("active");
+            	$(".tab-content .active").removeClass(
+                "active");
+                 $('#tab1default').addClass("active");
+				
+ 
+                $.get('xmlServletPath', {
+                        query: queryVal
+                    },
+                    function(
+                        response) {
+
+                    	
+                        var jsonData = JSON.parse(response);
+                        var googleData = jsonData['google'];
+                        var bingData = jsonData['bing'];
+                        var solrData = jsonData['solr'];
+                        
+                        $(".solr")
+                        .html(
+                            "");
+                    $(".hideme")
+                        .removeClass(
+                            "hideme");
+                    var count =0;
+                    for (var i in solrData) {
+                    	count = count +1;
+                        var link = solrData[i].id;
+                        var title = solrData[i].title;
+                        var description = solrData[i].content;
+                        var dat = "<blockquote> <p><a href='" + link + "'>" +
+                            title +
+                            "</a><br><span class='linkclass'>"+link+"</span></p> <small><cite title='" +
+                            "Source Title'>" +
+                            truncate.apply(description, [200, true]);+
+                            "</cite></small></blockquote>";
+                        $(".solr")
+                            .append(
+                                "" +
+                                dat +
+                                "<br>");
+                        if(count == 15){
+                        	break;
+                        }
+                    }
+
+                        $(".google")
+                            .html(
+                                "");
+                        $(".hideme")
+                            .removeClass(
+                                "hideme");
+                        for (var i in googleData) {
+                            var link = googleData[i].link;
+                            var title = googleData[i].title;
+                            var description = googleData[i].snippet;
+                            var dat = "<blockquote> <p><a href='" + link + "'>" +
+                                title +
+                                "</a><br><span class='linkclass'>"+link+"</span></p> <small><cite title='" +
+                                "Source Title'>" +
+                                description +
+                                "</cite></small></blockquote>";
+                            $(
+                                    ".google")
+                                .append(
+                                    "" +
+                                    dat +
+                                    "<br>");
+                        }
+
+
+
+
+                        $(".bing")
+                            .html(
+                                "");
+                        $(".hideme")
+                            .removeClass(
+                                "hideme");
+                        for (var i in bingData) {
+                            var link = bingData[i].Url;
+                            var title = bingData[i].Title;
+                            var description = bingData[i].Description;
+                            var dat = "<blockquote> <p><a href='" + link + "'>" +
+                                title +
+                                "</a><br><span class='linkclass'>"+link+"</span></p> <small><cite title='" +
+                                "Source Title'>" +
+                                description +
+                                "</cite></small></blockquote>";
+                            $(
+                                    ".bing")
+                                .append(
+                                    "" +
+                                    dat +
+                                    "<br>");
+                        }
+		
+
+                        $.post('JSONServletPath', {
+                            dat: JSON.stringify(solrData)
+                        },
+                        function(
+                            response) {
+                        	var data1 = JSON.parse(response);
+                         	var clusterJsonData = data1['cluster'];
+                         	var hitsJsonData = data1['hits'];
+                         	
+                         	//console.log(hitsJsonData);
+                         	$(".hits1")
+                            .html(
+                                "");
+                        $(".hideme")
+                            .removeClass(
+                                "hideme");
+                        for (var i in hitsJsonData) {
+                        	console.log("here");
+                        	count = count +1;
+                            var link = hitsJsonData[i].id;
+                            //console.log(hitsJsonData[i])
+                            var title = hitsJsonData[i].title;
+                            var description = hitsJsonData[i].content;
+                            var dat = "<blockquote> <p><a href='" + link + "'>" +
+                                title +
+                                "</a><br><span class='linkclass'>"+link+"</span></p> <small><cite title='" +
+                                "Source Title'>" +
+                                truncate.apply(description, [200, true]);+
+                                "</cite></small></blockquote>";
+                            $(".hits1")
+                                .append(
+                                    "" +
+                                    dat +
+                                    "<br>");
+                            if(count == 15){
+                            	break;
+                            }
+                        }
+						 
+                        $(".cluster1")
+                        .html(
+                            "");
+                    $(".hideme")
+                        .removeClass(
+                            "hideme");
+                    for (var i in clusterJsonData) {
+                    	count = count +1;
+                        var link = clusterJsonData[i].id;
+                        var title = clusterJsonData[i].title;
+                        var description = clusterJsonData[i].content;
+                        var dat = "<blockquote> <p><a href='" + link + "'>" +
+                            title +
+                            "</a><br><span class='linkclass'>"+link+"</span></p> <small><cite title='" +
+                            "Source Title'>" +
+                            truncate.apply(description, [200, true]);+
+                            "</cite></small></blockquote>";
+                        $(".cluster1")
+                            .append(
+                                "" +
+                                dat +
+                                "<br>");
+                        if(count == 15){
+                        	break;
+                        }
+                    }
+
+                        
+                        });
+                        $.post('QueryExpansionServlet', {
+                            dat: queryVal
+                        },
+                        function(
+                            response) {
+                        	var data1 = JSON.parse(response);
+                         	var expQuery = data1['eQuery'];
+                         	var qExpJsonData = data1['qExp'];
+                         	
+                         	$(".mose3")
+                            .html(
+                                "");
+                        $(".hideme")
+                            .removeClass(
+                                "hideme");
+                        //console.log(response);
+                        var dat1 = "<blockquote> <p> Expanded Query: " +
+                        expQuery +
+                        "</p> <br> </blockquote>";
+                    $(".mose3")
+                        .append("" +dat1 +"<br>");
+                    
+                    var count = 0
+                    for (var i in qExpJsonData) {
+                    	count = count +1;
+                        var link = qExpJsonData[i].id;
+                        var title = qExpJsonData[i].title;
+                        var description = qExpJsonData[i].content;
+                        var dat = "<blockquote> <p><a href='" + link + "'>" +
+                            title +
+                            "</a><br><span class='linkclass'>"+link+"</span></p> <small><cite title='" +
+                            "Source Title'>" +
+                            truncate.apply(description, [200, true]);+
+                            "</cite></small></blockquote>";
+                        $(".mose3")
+                            .append("" + dat +"<br>");
+                        if(count == 10){
+                        	break;
+                        }
+                    }
+                    
+						 });
+
+
+                    });
+            });
+
+
+
+            $(".nav-tabs li").click(
+                function() {
+                    $(".nav-tabs .active").removeClass(
+                        "active");
+                    $(this).addClass("active");
+                    $(".tab-content .active").removeClass(
+                        "active");
+                    var name = "#" + this.id + "default";
+                    $(name).addClass("active");
+
+                    //console.log(this.id);
+                });
+        });
+    </script>
+
+
+
+
+
+</body>
+
+
+
+</html>

@@ -1,0 +1,78 @@
+.wrapper {
+	width:100%;
+	margin: auto;
+}
+.headerbar{
+	width:900px;
+	height:230px;
+	margin:auto;	
+	
+}
+.search {
+	width: 900px;
+	margin: auto;
+}
+.searchbox{
+	width:500px;
+}
+.searchO{
+	float:left;
+}
+
+.hideme {
+	display: none;
+}
+
+.header {
+	height: 100px;
+}
+
+.space {
+	height: 30px;
+}
+
+#web-content {
+	width: 100%;
+}
+
+.content {
+	height: 100px;
+	text-align: center;
+}
+
+.data {
+	text-align: left;
+}
+
+.me {
+	float: left;
+	width: 30%;
+}
+
+.google {
+	float: left;
+	text-align: left;
+	width: 30%;
+}
+
+.bing {
+	float: left;
+	width: 30%;
+}
+.nav-tabs li { cursor: pointer; }
+
+.linkclass{
+	font-size: small;
+	
+}
+h3 {
+	text-align: center;
+}
+
+body {
+	font-family: 'Open Sans', sans-serif;
+	color: #353535;
+	background-color: #000000;
+}
+
+
